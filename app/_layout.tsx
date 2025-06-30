@@ -5,6 +5,14 @@ import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import React from 'react';
 
 export default function RootLayout() {
+  useEffect(() => {
+    if (!__DEV__) {
+      console.error = console.warn = (...args) => {
+        alert(args.join('\n'));
+      };
+    }
+  }, []);
+
   useFrameworkReady();
 
   return (

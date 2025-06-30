@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "bolt-expo-nativewind",
+    "name": "PindDaLangar",
     "slug": "bolt-expo-nativewind",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,6 +8,11 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -26,13 +31,17 @@
     },
     "extra": {
       "router": {},
+      "apiUrl": "https://bolt-hack-back.onrender.com/api",
       "eas": {
         "projectId": "c9a0d4d2-2ace-42cd-baee-921c9d36f608"
       }
     },
     "android": {
       "package": "com.chetan1707.boltexponativewind",
-      "permissions": ["INTERNET"]
-    }
+      "permissions": [
+        "INTERNET"
+      ]
+    },
+    "owner": "chetan1707"
   }
 }

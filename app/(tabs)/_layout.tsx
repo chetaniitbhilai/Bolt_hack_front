@@ -1,8 +1,16 @@
 import { Tabs } from 'expo-router';
 import { MapPin, Plus } from 'lucide-react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function TabLayout() {
+  useEffect(() => {
+    if (!__DEV__) {
+      console.error = console.warn = (...args) => {
+        alert(args.join('\n'));
+      };
+    }
+  }, []);
+
   return (
     <Tabs
       screenOptions={{

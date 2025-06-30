@@ -1,5 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+  Image,
+  Linking,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { Bhandara } from '@/types/bhandara';
@@ -23,17 +32,20 @@ export default function NearbyBhandarasScreen() {
         setLoading(true);
       }
       setError(null);
-      
+
       const hasPermission = await locationService.requestPermission();
       if (!hasPermission) {
-        setError('Location permission is required to find nearby bhandaras. Please enable location services in your device settings.');
+        setError(
+          'Location permission is required to find nearby bhandaras. Please enable location services in your device settings.'
+        );
         return;
       }
 
-      // Always get fresh location data
       const location = await locationService.getCurrentLocation();
       if (!location) {
-        setError('Unable to get your current location. Please check your location settings and try again.');
+        setError(
+          'Unable to get your current location. Please check your location settings and try again.'
+        );
         return;
       }
 
@@ -41,10 +53,12 @@ export default function NearbyBhandarasScreen() {
         location.latitude,
         location.longitude
       );
-      
+
       setBhandaras(nearbyBhandaras);
     } catch (err) {
-      setError('Failed to fetch nearby bhandaras. Please check your internet connection and try again.');
+      setError(
+        'Failed to fetch nearby bhandaras. Please check your internet connection and try again.'
+      );
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -55,7 +69,6 @@ export default function NearbyBhandarasScreen() {
     fetchNearbyBhandaras(true);
   };
 
-  // Re-fetch data with fresh location when tab comes into focus
   useFocusEffect(
     useCallback(() => {
       fetchNearbyBhandaras();
@@ -67,13 +80,24 @@ export default function NearbyBhandarasScreen() {
   }
 
   if (error && !refreshing) {
-    return <ErrorMessage message={error} onRetry={() => fetchNearbyBhandaras()} />;
+    return (
+      <ErrorMessage message={error} onRetry={() => fetchNearbyBhandaras()} />
+    );
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Nearby Bhandaras</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>Nearby Bhandaras</Text>
+          <TouchableOpacity onPress={() => Linking.openURL('https://bolt.new/')}>
+            <Image
+              source={require('@/assets/images/badge.png')}
+              style={styles.icon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.subtitle}>
           Community events within 5km of your current location
         </Text>
@@ -83,7 +107,7 @@ export default function NearbyBhandarasScreen() {
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>No bhandaras nearby</Text>
           <Text style={styles.emptyMessage}>
-            There are no community bhandaras within 5km of your current location. 
+            There are no community bhandaras within 5km of your current location.
             Check back later or consider organizing one yourself!
           </Text>
         </View>
@@ -120,16 +144,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e5e5e5',
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   title: {
     fontSize: 28,
     fontWeight: '700',
     color: '#1a1a1a',
-    marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
     color: '#666',
     lineHeight: 22,
+    marginTop: 4,
+  },
+  icon: {
+    width: 28,
+    height: 28,
+    marginLeft: 12,
   },
   listContainer: {
     paddingVertical: 8,
